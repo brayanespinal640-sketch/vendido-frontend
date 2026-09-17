@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Product {
   id: string;
@@ -45,18 +46,28 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
-      {/* Barra de Navegación */}
-      <header className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400">Vendido</Link>
-          
+      {/* Barra de Navegación Actualizada */}
+      <header className="border-b border-gray-200 bg-brand-light sticky top-0 z-10 shadow-sm">
+        <div className="max-w-6xl mx-auto px-6 py-2 flex justify-between items-center">
+          {/* Contenedor del Logo con altura controlada */}
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/images/logo.png"
+              alt="Logo Vendido"
+              width={140}
+              height={40}
+              style={{ width: 'auto', height: '36px' }} // Mantiene el aspecto correcto y fija un alto elegante
+              priority
+            />
+          </Link>
+
           <div className="flex items-center space-x-4">
             {user ? (
               <>
-                <span className="text-sm font-medium">Hola, {user.nombre}</span>
+                <span className="text-sm font-medium text-brand-dark">Hola, {user.nombre}</span>
                 <Link
                   href="/vender"
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium text-sm transition"
+                  className="px-4 py-2 bg-brand-primary hover:bg-blue-700 text-brand-light rounded-lg font-medium text-sm transition"
                 >
                   + Vender Producto
                 </Link>
@@ -69,12 +80,12 @@ export default function HomePage() {
               </>
             ) : (
               <>
-                <Link href="/login" className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:underline">
+                <Link href="/login" className="text-sm font-medium text-brand-dark hover:underline">
                   Iniciar Sesión
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-sm transition"
+                  className="px-4 py-2 bg-brand-primary hover:bg-blue-700 text-brand-light rounded-lg font-medium text-sm transition"
                 >
                   Registrarse
                 </Link>

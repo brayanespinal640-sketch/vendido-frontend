@@ -33,7 +33,7 @@ export default function LoginPage() {
       localStorage.setItem('user', JSON.stringify(data.user));
 
       // Redirigir al Dashboard / página principal
-      router.push('/dashboard');
+      router.push('/ ');
     } catch (err: any) {
       setError(err.message);
     } finally {
