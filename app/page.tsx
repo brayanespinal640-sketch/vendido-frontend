@@ -21,13 +21,13 @@ export default function HomePage() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    // Cargar datos de usuario guardados en sesión
+    // Cargar datos del usuario
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
 
-    // Obtener la lista de productos disponibles
+    // Cargar la lista de productos
     fetch('http://localhost:4000/api/products')
       .then((res) => res.json())
       .then((data) => {
@@ -102,9 +102,10 @@ export default function HomePage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.map((prod) => (
-              <div
+              <Link
                 key={prod.id}
-                className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition flex flex-col justify-between"
+                href={`/products/${prod.id}`}
+                className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg transition flex flex-col justify-between group cursor-pointer"
               >
                 <div>
                   {/* Imagen del Producto */}
@@ -113,7 +114,7 @@ export default function HomePage() {
                       <img
                         src={prod.imagenes[0]}
                         alt={prod.titulo}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
@@ -121,14 +122,14 @@ export default function HomePage() {
                       </div>
                     )}
                     {/* Badge Tipo de Entrega */}
-                    <span className="absolute top-2 right-2 px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+                    <span className="absolute top-2 right-2 px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 shadow-sm">
                       {prod.tipo_entrega}
                     </span>
                   </div>
 
                   {/* Detalles */}
                   <div className="p-4">
-                    <h3 className="font-semibold text-lg line-clamp-1 mb-1">{prod.titulo}</h3>
+                    <h3 className="font-semibold text-lg line-clamp-1 mb-1 group-hover:text-blue-600 transition">{prod.titulo}</h3>
                     <p className="text-gray-500 dark:text-gray-400 text-sm line-clamp-2 mb-3">{prod.descripcion}</p>
                     <p className="text-xl font-bold text-green-600 dark:text-green-400">${prod.precio.toFixed(2)}</p>
                   </div>
@@ -137,8 +138,9 @@ export default function HomePage() {
                 {/* Vendedor */}
                 <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
                   <span>Vendedor: {prod.user?.nombre || 'Anónimo'}</span>
+                  <span className="text-blue-600 dark:text-blue-400 font-medium group-hover:underline">Ver detalle →</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
