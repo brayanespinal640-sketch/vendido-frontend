@@ -16,6 +16,7 @@ interface Product {
     id: string;
     nombre: string;
     email: string;
+    foto_perfil?: string;
   };
 }
 
@@ -105,7 +106,29 @@ export default function ProductDetailPage() {
               <h1 className="text-3xl font-bold mb-2">{product.titulo}</h1>
               <p className="text-2xl font-bold text-green-600 dark:text-green-400 mb-4">${product.precio.toFixed(2)}</p>
               <p className="text-gray-600 dark:text-gray-300 mb-6">{product.descripcion}</p>
-              <p className="text-sm text-gray-500">Vendedor: {product.user?.nombre}</p>
+
+              {/* Área del Vendedor */}
+              <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <p className="text-xs text-gray-500 mb-2 font-medium">Publicado por:</p>
+                <Link
+                  href={`/usuario/${product.user_id}`}
+                  className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition border border-gray-200 dark:border-gray-600 group"
+                >
+                  <div className="w-12 h-12 rounded-full overflow-hidden bg-blue-100 dark:bg-blue-900 flex items-center justify-center font-bold text-blue-600 dark:text-blue-300 shrink-0">
+                    {product.user?.foto_perfil ? (
+                      <img src={product.user.foto_perfil} alt={product.user.nombre} className="w-full h-full object-cover" />
+                    ) : (
+                      product.user?.nombre?.charAt(0) || 'U'
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+                      {product.user?.nombre}
+                    </h4>
+                    <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">Ver perfil público y opiniones →</span>
+                  </div>
+                </Link>
+              </div>
             </div>
 
             {!isOwner ? (
@@ -116,7 +139,7 @@ export default function ProductDetailPage() {
                 💬 Contactar al vendedor
               </button>
             ) : (
-              <div className="p-3 bg-yellow-50 text-yellow-800 rounded-lg text-sm text-center font-medium mt-6">
+              <div className="p-3 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 rounded-lg text-sm text-center font-medium mt-6">
                 Este es tu producto publicado
               </div>
             )}
