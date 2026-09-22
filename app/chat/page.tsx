@@ -28,6 +28,7 @@ export default function ChatPage() {
   const router = useRouter();
   const conversationId = searchParams.get('conversation_id');
   const productId = searchParams.get('product_id');
+  const initMsg = searchParams.get('init_msg');
 
   const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -75,6 +76,15 @@ export default function ChatPage() {
 
     if (conversationId) {
       newSocket.emit('join_room', conversationId);
+
+      // Enviar mensaje inicial automático si viene especificado en la URL
+      if (initMsg && currentUser) {
+        newSocket.emit('send_message', {
+          conversation_id: conversationId,
+          emisor_id: currentUser.id,
+          contenido: decodeURIComponent(initMsg),
+        });
+      }
     }
 
     newSocket.on('receive_message', (message: Message) => {
@@ -84,7 +94,7 @@ export default function ChatPage() {
     return () => {
       newSocket.disconnect();
     };
-  }, [conversationId, productId, router]);
+  }, [conversationId, productId, router, initMsg]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -135,7 +145,7 @@ export default function ChatPage() {
         socket.emit('send_message', {
           conversation_id: conversationId,
           emisor_id: user.id,
-          contenido: ` system: ¡Compra realizada con exito! Metodo de entrega: ${metodoSeleccionado}.`,
+          contenido: `system: ¡Compra realizada con exito! Metodo de entrega: ${metodoSeleccionado}.`,
         });
       }
     } catch (err: any) {
