@@ -64,7 +64,9 @@ export default function HomePage() {
           <div className="flex items-center space-x-4">
             {user ? (
               <>
-                <span className="text-sm font-medium text-brand-dark">Hola, {user.nombre}</span>
+                <Link href="/perfil" className="text-sm font-medium text-brand-dark hover:underline flex items-center gap-1">
+                  👤 {user.nombre}
+                </Link>
                 <Link
                   href="/vender"
                   className="px-4 py-2 bg-brand-primary hover:bg-blue-700 text-brand-light rounded-lg font-medium text-sm transition"
