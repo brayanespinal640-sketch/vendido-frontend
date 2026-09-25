@@ -32,8 +32,14 @@ export default function LoginPage() {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      // Redirigir al Dashboard / página principal
-      router.push('/ ');
+      // Evaluar rol para determinar la ruta de destino
+      const role = data.user?.tipo_usuario ? String(data.user.tipo_usuario).toUpperCase() : '';
+
+      if (role === 'ADMIN' || role === 'LOGISTICA') {
+        router.push('/admin/delivery');
+      } else {
+        router.push('/');
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -54,6 +60,7 @@ export default function LoginPage() {
             <input
               type="email"
               required
+              placeholder="ejemplo@correo.com"
               className="w-full p-2.5 rounded-lg border text-gray-900 dark:bg-gray-700 dark:text-white dark:border-gray-600"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -64,6 +71,7 @@ export default function LoginPage() {
             <input
               type="password"
               required
+              placeholder="••••••••"
               className="w-full p-2.5 rounded-lg border text-gray-900 dark:bg-gray-700 dark:text-white dark:border-gray-600"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
@@ -72,7 +80,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition disabled:opacity-50"
           >
             {loading ? 'Ingresando...' : 'Iniciar Sesión'}
           </button>
